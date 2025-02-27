@@ -292,4 +292,11 @@ footer p {
     margin: 2px; /* Ajuste este valor (5px) para a quantidade de espaço desejada */
 }
 
-
+@media (max-width: 768px) {
+    .navbar-brand img {
+        max-height: 30px;
+    }
+    .card {
+        margin: 10px;
+    }
+}

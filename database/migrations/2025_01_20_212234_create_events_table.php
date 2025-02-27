@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('city');
             $table->text('description');
+            $table->boolean('private')->default(false);
             $table->boolean('attendance_open')->default(false); // campo para controlar se a lista de presença está aberta
             $table->timestamps();
         });
