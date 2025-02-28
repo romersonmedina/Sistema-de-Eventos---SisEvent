@@ -53,10 +53,11 @@
                             </form>
                         </li>
                         <li class="nav-item">
-                            <a href="/dashboard" class="nav-link">
+                            <a href="{{ route('perfil') }}" class="nav-link">
                                 <ion-icon name="person-circle-outline" class="icon-spacing"></ion-icon> {{ explode(' ', auth()->user()->name)[0] }}
                             </a>
                         </li>
+
                         @endauth
                         @guest
 
@@ -84,8 +85,9 @@
         </div>
     </main>
 
-    <footer class="text-center mt-5">
-        <p>SisEvents &copy; 2025</p>
+    <footer class="text-center mt-4">
+        <p>SisEvents - Sistema de Gestão de Eventos Acadêmicos</p>
+        <p>&copy; {{ date('Y') }} - Todos os direitos reservados</p>
     </footer>
 
     <!-- Scripts necessários -->

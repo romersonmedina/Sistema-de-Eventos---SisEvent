@@ -1,10 +1,11 @@
 <x-guest-layout>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/inputmask/dist/inputmask.min.js"></script>
+
 
     <x-authentication-card>
         <x-slot name="logo">
-            <!-- <x-authentication-card-logo /> -->
             <a href="/" class="navbar-brand">
                 <img src="/img/logo.png" alt="SisEvents">
             </a>
@@ -23,6 +24,34 @@
             <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" placeholder="Digite um email válido" name="email" :value="old('email')" required autocomplete="username" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="phone" value="{{ __('Telefone') }}" />
+                <x-input id="phone" class="block mt-1 w-full" type="text" placeholder="Digite seu telefone" name="phone" :value="old('phone')" required />
+            </div>
+
+            <script>
+                // Inicializando a máscara para o campo de telefone
+                const phoneInput = document.getElementById('phone');
+                const im = new Inputmask('(99) 99999-9999');
+                im.mask(phoneInput);
+            </script>
+
+            <div class="mt-4">
+                <x-label for="birth_date" value="{{ __('Data de Nascimento') }}" />
+                <x-input id="birth_date" class="block mt-1 w-full" type="date" name="birth_date" :value="old('birth_date')" required />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="gender" value="{{ __('Gênero') }}" />
+                <select id="gender" name="gender" class="block mt-1 w-full" required>
+                    <option value="" disabled selected>Selecione seu gênero</option>
+                    <option value="masculino" {{ old('gender') == 'masculino' ? 'selected' : '' }}>Masculino</option>
+                    <option value="feminino" {{ old('gender') == 'feminino' ? 'selected' : '' }}>Feminino</option>
+                    <option value="feminino" {{ old('gender') == 'prefiro não dizer' ? 'selected' : '' }}>Prefiro não dizer</option>
+                    <option value="outro" {{ old('gender') == 'outro' ? 'selected' : '' }}>Outro</option>
+                </select>
             </div>
 
             <div class="mt-4">

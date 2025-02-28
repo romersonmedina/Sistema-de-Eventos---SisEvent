@@ -8,6 +8,6 @@
 <body>
     <p>Olá {{ $event->user->name }},</p>
     <p>A lista de presença para o evento "{{ $event->title }}" foi liberada. Clique no link abaixo para marcar sua presença:</p>
-    <a href="{{ url('events/' . $event->id . '/mark-attendance') }}">Marcar presença</a>
+    <<a href="{{ url('events/' . $event->id . '/mark-attendance') }}" class="btn btn-primary">Marcar presença</a>
 </body>
 </html>

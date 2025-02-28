@@ -21,7 +21,7 @@ class Event extends Model
 
     public function users()
     {
-    return $this->belongsToMany(User::class, 'event_user'); // Certifique-se de que está buscando os inscritos
+    return $this->belongsToMany(User::class, 'event_user')->withTimestamps();; // Certifique-se de que está buscando os inscritos
     }
 
     public function checkins()

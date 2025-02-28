@@ -34,6 +34,8 @@
                             <p id="countdown-{{ $event->id }}" class="countdown" data-event-date="{{ date('Y-m-d', strtotime($event->date)) }}"></p>
                             <a href="/events/{{ $event->id }}" class="btn btn-primary">Ver detalhes</a>
                             <a href="/events/{{ $event->id }}/statistics" class="btn btn-primary">Estatísticas</a>
+                            <a href="{{ route('event.manage', $event->id) }}" class="btn btn-warning">Gerir Evento</a>
+                            <!--
                             <div class="mt-2">
                                 <a href="/events/edit/{{ $event->id }}" class="btn btn-info">Editar</a>
                                 <a href="/events/{{ $event->id }}/participants" class="btn btn-success">Lista de Inscritos</a>
@@ -47,19 +49,20 @@
                                     @csrf
                                     <button type="submit" class="btn btn-info">Imprimir Lista Assinada</button>
                                 </form>
-                                <form action="/events/{{ $event->id }}" method="POST" class="d-inline">
+                                <form action="{{ route('event.delete', $event->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Você tem certeza que deseja deletar este evento?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Deletar</button>
                                 </form>
                             </div>
+                        -->
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
     @else
-        <p>Você ainda não tem eventos, <a href="/events/create">criar evento</a></p>
+        <p>Você ainda não tem eventos, <a href="/events/create">criar evento</a>.</p>
     @endif
 </div>
 

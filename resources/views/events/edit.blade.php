@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div id="event-create-container" class="col-md-6 offset-md-3">
+<div id="event-create-container" class="col-md-6 offset-md-3" style= "margin-right: auto;">
     <h1>Editando: {{ $event->title }}</h1>
     <form action="/events/update/{{ $event->id }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -94,7 +94,7 @@
                 <input type="checkbox" name="items[]" value="QEspaço para exposições"> Espaço para exposições</input>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" value="Editar Evento">
+        <input type="submit" class="btn btn-primary" value="Salvar Edição">
     </form>
 
     <script>

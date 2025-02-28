@@ -262,11 +262,13 @@ class EventController extends Controller
             return redirect()->back()->with('error', 'A lista de presença não está aberta ainda.');
         }
 
-        return view('events.attendance', compact('event'));
+        $attendanceList = $event->users()->whereNotNull('pivot.signed_at')->get();
+        dd($attendanceList);
+
+        return view('events.attendance', compact('event', 'attendanceList'));
     }
 
     public function signAttendance($id) {
-
         $event = Event::find($id);
 
         // Verifica se o usuário já assinou
@@ -274,11 +276,12 @@ class EventController extends Controller
             return redirect()->back()->with('error', 'Você já assinou a lista de presença.');
         }
 
-        // Adiciona o usuário à lista de presença
-        $event->users()->attach(auth()->user()->id);
+        // Adiciona o usuário à lista de presença e registra a data de assinatura
+        $event->users()->attach(auth()->user()->id, ['signed_at' => now()]);  // Adicionando a data de assinatura
 
         return redirect()->route('events.attendance', $event->id)->with('success', 'Presença assinada com sucesso!');
     }
+
 
     public function toggleAttendance($id){
 
@@ -304,7 +307,7 @@ class EventController extends Controller
                 }
             }
 
-            return redirect()->back()->with('message', 'Lista de presença liberada com sucesso!');
+            return redirect()->back()->with('message', "Lista de presença do evento: {$event->title} liberada com sucesso!");
         }
 
         return redirect()->back()->with('error', 'Evento não encontrado!');
@@ -502,6 +505,62 @@ class EventController extends Controller
 
     }*/
 
+    public function manage($id) {
+        $event = Event::findOrFail($id);
+        $user = auth()->user();
+
+        // Verifica se o usuário tem permissão para gerenciar o evento
+        if (!$user || $user->id !== $event->user_id) {
+            return redirect()->route('events.show', $id)->with('error', 'Você não tem permissão para gerenciar este evento.');
+        }
+
+        $eventOwner = User::find($event->user_id); // Obtém o dono do evento diretamente
+
+        return view('events.manage', [
+            'event' => $event,
+            'eventOwner' => $eventOwner, // Passando o dono do evento
+            'hasUserJoined' => $user->eventsAsParticipant()->wherePivot('event_id', $id)->exists(),
+        ]);
+    }
+
+    public function editUser()
+    {
+        $user = auth()->user(); // Pega o usuário logado
+        return view('perfil', compact('user')); // Retorna a visão 'perfil' com os dados do usuário
+    }
+
+    public function updateUser(Request $request)
+    {
+        // Validação dos campos
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'dob' => 'required|date',
+            'phone' => 'required|string|max:15',
+            'gender' => 'required|string',
+        ]);
+
+        // Atualiza os dados do usuário logado
+        $user = auth()->user();
+        $user->update($request->all());
+
+        // Redireciona para a página de perfil com mensagem de sucesso
+        return redirect()->route('perfil')->with('success', 'Perfil atualizado com sucesso!');
+    }
+
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'new_password' => 'required|min:6',
+        ]);
+
+        $user = Auth::user();
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Senha atualizada com sucesso!');
+    }
 
 }
 
