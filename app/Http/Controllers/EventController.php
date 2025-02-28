@@ -98,26 +98,26 @@ class EventController extends Controller
 
     public function show($id) {
         $event = Event::findOrFail($id);
-
         $user = auth()->user();
+
         $hasUserJoined = false;
 
-        if($user) {
-            $userEvents = $user->eventsAsParticipant->toArray();
-
-            foreach($userEvents as $userEvent) {
-                if($userEvent['id'] == $id) {
-                    $hasUserJoined = true;
-                }
-            }
+        if ($user) {
+            $hasUserJoined = $user->eventsAsParticipant()
+                ->wherePivot('event_id', $id)
+                ->wherePivot('cancelled', false)
+                ->exists();
         }
-        // Verificar se o usuário está inscrito no evento e se não foi cancelado
-        $hasUserJoined = $user->eventsAsParticipant()->wherePivot('event_id', $id)->wherePivot('cancelled', false)->exists();
 
         $eventOwner = User::where('id', $event->user_id)->first()->toArray();
 
-        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner, 'hasUserJoined' => $hasUserJoined]);
+        return view('events.show', [
+            'event' => $event,
+            'eventOwner' => $eventOwner,
+            'hasUserJoined' => $hasUserJoined
+        ]);
     }
+
 
 
     public function dashboard()
