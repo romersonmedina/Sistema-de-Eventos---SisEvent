@@ -66,7 +66,7 @@
 </head>
 <body>
     <header>
-        <h1>Lista de Presença - {{ $event->title }}</h1>
+        <h1>Lista de Presença Assinada do Evento - {{ $event->title }}</h1>
     </header>
 
     <table>
